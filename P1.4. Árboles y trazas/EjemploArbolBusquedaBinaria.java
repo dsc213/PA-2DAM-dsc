@@ -17,6 +17,11 @@ public class EjemploArbolBusquedaBinaria {
             System.out.println("Contenido del árbol:");
 
             arbol.mostrar();
+            arbol.buscar(40);
+            arbol.buscar(90);
+            arbol.buscar(50);
+
+
         }
     }
 

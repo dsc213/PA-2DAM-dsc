@@ -48,8 +48,23 @@ public class ArbolBinarioBusqueda {
     public boolean buscar(int dato) {
 
         NodoArbol actual = raiz;
-        
 
+        while (true) {
+            if (actual == null){
+                System.out.println("No se ha encontrado el dato");
+                return false;
+            }
+            else if(dato == actual.dato){
+                System.out.println("Dato encontrado: " + actual.dato);
+                return true;
+            }
+            else if (dato > actual.dato) {
+                actual = actual.derecho;
+            }
+            else if(dato < actual.dato){
+                actual = actual.izquierdo;
+            }
+        }
 
     }
 
@@ -86,7 +101,7 @@ public class ArbolBinarioBusqueda {
 
         preOrden(nodo.derecho);
     }
-    
+
     public void postOrden(NodoArbol nodo) {
         if (nodo == null) {
             return;
