@@ -34,5 +34,41 @@ public class Main {
 
         System.out.println();
         grafo.mostrarVecinos("Madrid");
+
+
+        // Comprobar el comportamiento
+
+        System.out.println("\nRUTA DE MADRID A ALBACETE:");
+
+        System.out.println(grafo.buscarRutaDFS("Madrid", "Albacete"));
+
+
+        // Eliminar la conexion Toledo - Albacete
+        System.out.println("\nELIMINAR TOLEDO - ALBACETE:");
+
+        grafo.eliminarArista("Toledo", "Albacete");
+
+        System.out.println(grafo.buscarRutaDFS("Madrid", "Albacete"));
+
+
+        // Eliminar la conexion Cuenca - Albacete
+        System.out.println("\nELIMINAR CUENCA - ALBACETE:");
+
+        grafo.eliminarArista("Cuenca", "Albacete");
+
+        System.out.println(grafo.buscarRutaDFS("Madrid", "Albacete"));
+
+
+        // Buscar una ruta entre ciudades sin conexion
+        System.out.println("\nBUSCAR RUTA SIN CONEXION:");
+
+        System.out.println(grafo.buscarRutaDFS("Madrid", "Albacete"));
+
+
+        // Buscar una ruta desde Madrid hasta Madrid
+        System.out.println("\nBUSCAR RUTA DE MADRID A MADRID:");
+
+        System.out.println(grafo.buscarRutaDFS("Madrid", "Madrid"));
+
     }
 }

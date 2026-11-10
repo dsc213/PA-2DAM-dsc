@@ -1,5 +1,5 @@
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class Grafo {
 
@@ -32,8 +32,10 @@ public class Grafo {
     // Elimina una conexión entre dos ciudades
     public void eliminarArista(String origen, String destino) {
         if (!aristas.isEmpty()) {
-            for (Arista a : aristas) {
-                if (a.getOrigen().equals(origen) && a.getDestino().equals(destino)) {
+            for (int i = 0; i < aristas.size(); i++) {
+                Arista a = aristas.get(i);
+
+                if (a.getOrigen().getNombre().equals(origen) && a.getDestino().getNombre().equals(destino)) {
                     aristas.remove(a);
                     System.out.println("Conexion eliminada.");
                 }
@@ -94,6 +96,112 @@ public class Grafo {
 
         return null;
     }
+
+    //Devuelve una lista con las ciudades directamente conectadas con el vértice recibido
+    public ArrayList<Vertice> obtenerVecinos(Vertice v) {
+        ArrayList<Vertice> vecinos = new ArrayList<>();
+        Vertice ciudad = buscarVertice(v.getNombre());
+
+        for (Arista a : aristas) {
+            if (a.getOrigen() == ciudad && a.getDestino() != null) {
+                vecinos.add(a.getDestino());
+            } else if (a.getDestino() == ciudad && a.getOrigen() != null) {
+                vecinos.add(a.getOrigen());
+            }
+        }
+
+        return vecinos;
+    }
+
+    //Comprueba si existe una ruta utilizando DFS
+    public boolean existeRutaDFS(String origen, String destino) {
+
+        Vertice inicio = buscarVertice(origen);
+        Vertice fin = buscarVertice(destino);
+
+        if (inicio == null || fin == null) {
+            System.out.println("Una de las ciudades introducidas no existe");
+            return false;
+        }
+
+        Deque<Vertice> pila = new ArrayDeque<>();
+        Set<Vertice> visitados = new HashSet<>();
+
+        pila.push(inicio);
+
+        while (!pila.isEmpty()) {
+
+            Vertice actual = pila.pop();
+            System.out.println("Visitando: " + actual);
+
+            if (actual == fin) {
+                System.out.println("Destino encontrado");
+                return true;
+            }
+
+            if (!visitados.contains(actual)) {
+                visitados.add(actual);
+
+                for (Vertice vecino : obtenerVecinos(actual)) {
+                    if (!visitados.contains(vecino)) {
+                        pila.push(vecino);
+                    }
+                }
+            }
+        }
+        System.out.println("Destino no encontrado");
+        return false;
+    }
+
+
+    //Busca una ruta entre dos ciudades utilizando DFS
+    public ArrayList<Vertice> buscarRutaDFS(String origen, String destino) {
+
+        ArrayList<Vertice> ruta = new ArrayList<>();
+
+        Vertice inicio = buscarVertice(origen);
+        Vertice fin = buscarVertice(destino);
+
+        if (inicio == null || fin == null) {
+            return ruta;
+        }
+
+        Deque<Vertice> pila = new ArrayDeque<>();
+        Set<Vertice> visitados = new HashSet<>();
+        Map<Vertice, Vertice> anteriores = new HashMap<>();
+
+        pila.push(inicio);
+        visitados.add(inicio);
+
+        while (!pila.isEmpty()) {
+
+            Vertice actual = pila.pop();
+
+            if (actual == fin) {
+
+                Vertice v = fin;
+
+                while (v != null) {
+                    ruta.add(0, v);
+                    v = anteriores.get(v);
+                }
+
+                return ruta;
+            }
+
+            for (Vertice vecino : obtenerVecinos(actual)) {
+
+                if (!visitados.contains(vecino)) {
+                    visitados.add(vecino);
+                    anteriores.put(vecino, actual);
+                    pila.push(vecino);
+                }
+            }
+        }
+
+        return ruta;
+    }
+
 
     // Añadir un nuevo vértice
     public void agregarVertice(String nombre) {
